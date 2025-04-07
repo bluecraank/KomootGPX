@@ -29,6 +29,7 @@ def usage():
 
     print(bcolor.OKBLUE + '[Filters]' + bcolor.ENDC)
     print('\t{:<2s}, {:<30s} {:<10s}'.format('-f', '--filter=type', 'Filter by track type (either "planned" or "recorded")'))
+    print('\t{:<2s}, {:<30s} {:<10s}'.format('-f', '--sport=type', 'Filter by sport type (e.g touringbicycle, leave empty for all)'))
 
     print(bcolor.OKBLUE + '[Generator]' + bcolor.ENDC)
     print('\t{:<2s}, {:<30s} {:<10s}'.format('-o', '--output', 'Output directory (default: working directory)'))
@@ -81,6 +82,7 @@ def main(argv):
     anonymous = False
     max_desc_length = -1
     typeFilter = "all"
+    sportFilter = "all"
     output_dir = os.getcwd()
 
     try:
@@ -98,6 +100,9 @@ def main(argv):
 
         elif opt in ("-f", "--filter"):
             typeFilter = "tour_" + str(arg)
+
+        elif opt in ("-s", "--sport"):
+            sportFilter = "sport_" + str(arg)
 
         elif opt in ("-l", "--list-tours"):
             print_tours = True
@@ -158,7 +163,7 @@ def main(argv):
             api.print_tours(typeFilter)
             sys.exit(0)
 
-        tours = api.fetch_tours(typeFilter)
+        tours = api.fetch_tours(typeFilter, sportFilter)
 
     if tour_selection == "":
         notify_interactive()
